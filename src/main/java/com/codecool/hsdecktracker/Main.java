@@ -33,7 +33,6 @@ public class Main {
         user.addDeckToUser(deck);
         user2.addDeckToUser(deck2);
 
-
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
         em.persist(card);
@@ -43,16 +42,6 @@ public class Main {
         em.persist(user);
         em.persist(user2);
         transaction.commit();
-
-
-
-//        transaction.begin();
-//        em.persist(student2);
-//        em.persist(address2);
-//        em.persist(classBp2);
-//        transaction.commit();
-
-
 
     }
 }
