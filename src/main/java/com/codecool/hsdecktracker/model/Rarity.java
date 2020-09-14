@@ -1,10 +1,11 @@
 package com.codecool.hsdecktracker.model;
 
 public enum Rarity {
-    NORMAL(40),
+    COMMON(40),
     RARE(100),
     EPIC(400),
-    LEGENDARY(1600);
+    LEGENDARY(1600),
+    FREE(0);
 
     private final int cost;
 

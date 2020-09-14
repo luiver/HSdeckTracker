@@ -1,19 +1,22 @@
 package com.codecool.hsdecktracker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "cards")
 public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    private long card_id;
 
     @Column(nullable = false, unique = true)
-    private String idString;
+    private String id;
 
     @Enumerated(value = EnumType.STRING)
-    private PlayerClass playerClass;
+    private CardClass cardClass;
 
     @Enumerated(value = EnumType.STRING)
     private Type type;
@@ -21,11 +24,11 @@ public class Card {
     private String name;
 
     @Enumerated(value = EnumType.STRING)
-    private CardSet cardSet;
+    private CardSet set;
 
     private String text;
-
-    private int manaCost;
+    @Column(name = "mana_cost")
+    private int cost;
 
     private int attack;
 
@@ -40,36 +43,39 @@ public class Card {
     @ManyToOne(fetch= FetchType.LAZY)
     private Deck deck;
 
+    public Card(){
+        super();
+    }
 
     //TODO zrobić buildera?
-    public Card(String idString, PlayerClass playerClass, Type type, String name, CardSet cardSet, String text, int manaCost, int attack, int health, Rarity rarity) {
-        this.idString = idString;
-        this.playerClass = playerClass;
+    public Card(String id, CardClass cardClass, Type type, String name, CardSet set, String text, int cost, int attack, int health, Rarity rarity) {
+        this.id = id;
+        this.cardClass = cardClass;
         this.type = type;
         this.name = name;
-        this.cardSet = cardSet;
+        this.set = set;
         this.text = text;
-        this.manaCost = manaCost;
+        this.cost = cost;
         this.attack = attack;
         this.health = health;
         this.rarity = rarity;
         this.dustCost = rarity.getCost();
     }
 
-    public String getIdString() {
-        return idString;
+    public String getId() {
+        return id;
     }
 
-    public void setIdString(String idString) {
-        this.idString = idString;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public PlayerClass getPlayerClass() {
-        return playerClass;
+    public CardClass getCardClass() {
+        return cardClass;
     }
 
-    public void setPlayerClass(PlayerClass playerClass) {
-        this.playerClass = playerClass;
+    public void setCardClass(CardClass cardClass) {
+        this.cardClass = cardClass;
     }
 
     public Type getType() {
@@ -88,12 +94,12 @@ public class Card {
         this.name = name;
     }
 
-    public CardSet getCardSet() {
-        return cardSet;
+    public CardSet getSet() {
+        return set;
     }
 
-    public void setCardSet(CardSet cardSet) {
-        this.cardSet = cardSet;
+    public void setSet(CardSet set) {
+        this.set = set;
     }
 
     public String getText() {
@@ -104,12 +110,12 @@ public class Card {
         this.text = text;
     }
 
-    public int getManaCost() {
-        return manaCost;
+    public int getCost() {
+        return cost;
     }
 
-    public void setManaCost(int manaCost) {
-        this.manaCost = manaCost;
+    public void setCost(int cost) {
+        this.cost = cost;
     }
 
     public int getAttack() {
@@ -150,5 +156,22 @@ public class Card {
 
     public void setDeck(Deck deck) {
         this.deck = deck;
+    }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "idString='" + id + '\'' +
+                ", playerClass=" + cardClass +
+                ", type=" + type +
+                ", name='" + name + '\'' +
+                ", cardSet=" + set +
+                ", text='" + text + '\'' +
+                ", manaCost=" + cost +
+                ", attack=" + attack +
+                ", health=" + health +
+                ", rarity=" + rarity +
+                ", dustCost=" + dustCost +
+                '}';
     }
 }
