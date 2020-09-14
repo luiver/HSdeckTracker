@@ -30,6 +30,13 @@ public class User {
         this.password = password;
         this.decks = new ArrayList<>();
     }
+    public User( String name, String email, String password) {
+//        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.decks = new ArrayList<>();
+    }
 
     public void addDeckToUser(Deck deck){
         decks.add(deck);

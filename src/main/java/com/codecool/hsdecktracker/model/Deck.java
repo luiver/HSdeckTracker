@@ -34,6 +34,11 @@ public class Deck {
         this.name = name;
         //this.cards = new ArrayList<>();
     }
+    public Deck(String name) {
+        //this.id = id;
+        this.name = name;
+        //this.cards = new ArrayList<>();
+    }
 
     public void addCardToDeck(Card card){
         cards.add(card);
