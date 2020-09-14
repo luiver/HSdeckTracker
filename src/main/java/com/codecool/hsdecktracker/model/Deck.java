@@ -13,7 +13,10 @@ public class Deck {
 
     private String name;
 
-    @OneToMany(mappedBy = "deck", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
+    //@ManyToMany(mappedBy = "deck", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
+//    @ElementCollection()
+//    @CollectionTable(name="decks_cards")
+    @ManyToMany
     private List<Card> cards = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
