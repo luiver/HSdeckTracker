@@ -13,8 +13,8 @@ public class Deck {
 
     private String name;
 
-    @ManyToOne()
-    private List<Card> cards;
+    @OneToMany(mappedBy = "deck", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
+    private List<Card> cards = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -22,25 +22,27 @@ public class Deck {
     public Deck() {
     }
 
-    public Deck(long id, String name, List<Card> cards, User user) {
-        this.id = id;
-        this.name = name;
-        this.cards = cards;
-        this.user = user;
-    }
+//    public Deck(long id, String name, List<Card> cards, User user) {
+//        this.id = id;
+//        this.name = name;
+//        this.cards = cards;
+//        this.user = user;
+//    }
 
     public Deck(long id, String name) {
         this.id = id;
         this.name = name;
-        this.cards = new ArrayList<>();
+        //this.cards = new ArrayList<>();
     }
 
     public void addCardToDeck(Card card){
         cards.add(card);
+        card.setDeck(this);
     }
 
     public void removeCardFromDeck(Card card){
         cards.remove(card);
+        card.setDeck(null);
     }
 
     public long getId() {

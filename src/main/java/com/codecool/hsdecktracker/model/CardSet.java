@@ -1,5 +1,5 @@
 package com.codecool.hsdecktracker.model;
 
-public enum Set {
+public enum CardSet {
     NAAX,
 }

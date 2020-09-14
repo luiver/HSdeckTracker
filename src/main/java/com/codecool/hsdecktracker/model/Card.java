@@ -1,13 +1,15 @@
 package com.codecool.hsdecktracker.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity(name = "cards")
 public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(nullable = false, unique = true)
     private String idString;
 
     @Enumerated(value = EnumType.STRING)
@@ -19,7 +21,7 @@ public class Card {
     private String name;
 
     @Enumerated(value = EnumType.STRING)
-    private Set set;
+    private CardSet cardSet;
 
     private String text;
 
@@ -35,30 +37,23 @@ public class Card {
     //TODO Test it it works: @Enumerated(value = EnumType.ORDINAL) instead of current solution
     private int dustCost;
 
-    private boolean isPremium;
-
-//    //TODO
-//    private List<Ability> abilities;
-
-    @OneToMany(mappedBy = "cards", fetch = FetchType.LAZY) //or ManyToMany?
+    @ManyToOne(fetch= FetchType.LAZY) //or ManyToMany?
     private Deck deck;
 
 
     //TODO zrobić buildera?
-    public Card(String idString, PlayerClass playerClass, Type type, String name, Set set, String text, int manaCost, int attack, int health, Rarity rarity, boolean isPremium) {
+    public Card(String idString, PlayerClass playerClass, Type type, String name, CardSet cardSet, String text, int manaCost, int attack, int health, Rarity rarity) {
         this.idString = idString;
         this.playerClass = playerClass;
         this.type = type;
         this.name = name;
-        this.set = set;
+        this.cardSet = cardSet;
         this.text = text;
         this.manaCost = manaCost;
         this.attack = attack;
         this.health = health;
         this.rarity = rarity;
         this.dustCost = rarity.getCost();
-        this.isPremium = isPremium;
-        //this.abilities = abilities;
     }
 
     public String getIdString() {
@@ -93,12 +88,12 @@ public class Card {
         this.name = name;
     }
 
-    public Set getSet() {
-        return set;
+    public CardSet getCardSet() {
+        return cardSet;
     }
 
-    public void setSet(Set set) {
-        this.set = set;
+    public void setCardSet(CardSet cardSet) {
+        this.cardSet = cardSet;
     }
 
     public String getText() {
@@ -148,22 +143,6 @@ public class Card {
     public void setDustCost(int dustCost) {
         this.dustCost = dustCost;
     }
-
-    public boolean isPremium() {
-        return isPremium;
-    }
-
-    public void setPremium(boolean premium) {
-        isPremium = premium;
-    }
-
-//    public List<Ability> getAbilities() {
-//        return abilities;
-//    }
-//
-//    public void setAbilities(List<Ability> abilities) {
-//        this.abilities = abilities;
-//    }
 
     public Deck getDeck() {
         return deck;

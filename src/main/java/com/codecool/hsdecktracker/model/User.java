@@ -20,7 +20,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade=CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Deck> decks;
 
     public User(long id, String name, String email, String password) {
@@ -30,6 +30,17 @@ public class User {
         this.password = password;
         this.decks = new ArrayList<>();
     }
+
+    public void addDeckToUser(Deck deck){
+        decks.add(deck);
+        deck.setUser(this);
+    }
+
+    public void removeDeckFromUser(Deck deck){
+        decks.remove(deck);
+        deck.setUser(null);
+    }
+
 
     public long getId() {
         return id;
