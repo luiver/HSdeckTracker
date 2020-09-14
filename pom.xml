@@ -16,6 +16,7 @@
         <version.el>3.0.1-b03</version.el>
         <version.postgres>42.1.1</version.postgres>
         <version.maven.compiler.plugin>3.1</version.maven.compiler.plugin>
+        <version.jetty-maven-plugin>9.4.6.v20170531</version.jetty-maven-plugin>
     </properties>
 
     <dependencies>
@@ -77,6 +78,15 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${version.jetty-maven-plugin}</version>
+                <configuration>
+                    <reload>automatic</reload>
+                    <scanIntervalSeconds>1</scanIntervalSeconds>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
