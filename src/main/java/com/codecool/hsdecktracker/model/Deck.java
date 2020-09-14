@@ -14,8 +14,6 @@ public class Deck {
     private String name;
 
     //@ManyToMany(mappedBy = "deck", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
-//    @ElementCollection()
-//    @CollectionTable(name="decks_cards")
     @ManyToMany
     private List<Card> cards = new ArrayList<>();
 
@@ -25,22 +23,8 @@ public class Deck {
     public Deck() {
     }
 
-//    public Deck(long id, String name, List<Card> cards, User user) {
-//        this.id = id;
-//        this.name = name;
-//        this.cards = cards;
-//        this.user = user;
-//    }
-
-    public Deck(long id, String name) {
-        this.id = id;
-        this.name = name;
-        //this.cards = new ArrayList<>();
-    }
     public Deck(String name) {
-        //this.id = id;
         this.name = name;
-        //this.cards = new ArrayList<>();
     }
 
     public void addCardToDeck(Card card){

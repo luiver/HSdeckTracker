@@ -23,15 +23,7 @@ public class User {
     @OneToMany(mappedBy = "user",cascade=CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Deck> decks;
 
-    public User(long id, String name, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.decks = new ArrayList<>();
-    }
     public User( String name, String email, String password) {
-//        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -47,7 +39,6 @@ public class User {
         decks.remove(deck);
         deck.setUser(null);
     }
-
 
     public long getId() {
         return id;

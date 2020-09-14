@@ -37,7 +37,7 @@ public class Card {
     //TODO Test it it works: @Enumerated(value = EnumType.ORDINAL) instead of current solution
     private int dustCost;
 
-    @ManyToOne(fetch= FetchType.LAZY) //or ManyToMany?
+    @ManyToOne(fetch= FetchType.LAZY)
     private Deck deck;
 
 
