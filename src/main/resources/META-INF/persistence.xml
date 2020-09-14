@@ -23,7 +23,7 @@
             <property name="javax.persistence.schema-generation.scripts.drop-target" value="src/main/resources/META-INF/drop-schema.ddl"/>
 
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://ec2-54-75-225-52.eu-west-1.compute.amazonaws.com:5432/d4mstjv279ghi3"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://ec2-54-75-225-52.eu-west-1.compute.amazonaws.com:5432/d4mstjv279ghi3?sslmode=require"/>
             <property name="javax.persistence.jdbc.user" value="mzmwrjyqafeyex"/>
             <property name="javax.persistence.jdbc.password" value="9f354d130bc65584699de319e86e44ec4bd8febcec6525a0c0577781ab12d44a"/>
             <!--<property name="javax.persistence.sql-load-script-source" value="insert.sql"/>-->
