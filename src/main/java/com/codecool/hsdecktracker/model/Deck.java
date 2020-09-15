@@ -13,8 +13,8 @@ public class Deck {
 
     private String name;
 
-    //@ManyToMany(mappedBy = "deck", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
-    @ManyToMany
+    @ManyToMany(mappedBy = "deck", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
+    //@ManyToMany
     private List<Card> cards = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,7 +29,8 @@ public class Deck {
 
     public void addCardToDeck(Card card){
         cards.add(card);
-        card.setDeck(this);
+        //card.setDeck(this);
+        card.addDeck(this);
     }
 
     public void removeCardFromDeck(Card card){

@@ -3,6 +3,8 @@ package com.codecool.hsdecktracker.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "cards")
@@ -40,11 +42,15 @@ public class Card {
     //TODO Test it it works: @Enumerated(value = EnumType.ORDINAL) instead of current solution
     private int dustCost;
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    private Deck deck;
+    @ManyToMany(fetch= FetchType.LAZY)
+    private List<Deck> deck = new ArrayList<>();
 
     public Card(){
         super();
+    }
+
+    public void addDeck(Deck deck){
+        this.deck.add(deck);
     }
 
     //TODO zrobić buildera?
@@ -150,11 +156,11 @@ public class Card {
         this.dustCost = dustCost;
     }
 
-    public Deck getDeck() {
+    public List<Deck> getDeck() {
         return deck;
     }
 
-    public void setDeck(Deck deck) {
+    public void setDeck(List<Deck> deck) {
         this.deck = deck;
     }
 
