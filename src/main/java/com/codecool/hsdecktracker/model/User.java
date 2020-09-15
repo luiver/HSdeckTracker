@@ -20,7 +20,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user",cascade=CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade=CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Deck> decks;
 
     public User( String name, String email, String password) {

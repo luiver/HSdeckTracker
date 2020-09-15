@@ -14,7 +14,6 @@ public class Deck {
     private String name;
 
     @ManyToMany(mappedBy = "deck", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
-    //@ManyToMany
     private List<Card> cards = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,7 +34,8 @@ public class Deck {
 
     public void removeCardFromDeck(Card card){
         cards.remove(card);
-        card.setDeck(null);
+        //card.setDeck(null);
+        card.removeDeck(this);
     }
 
     public long getId() {

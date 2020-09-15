@@ -14,18 +14,21 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long card_id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "id_string")
     private String id;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "card_class")
     private CardClass cardClass;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "card_type")
     private Type type;
 
     private String name;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "card_set")
     private CardSet set;
 
     private String text;
@@ -40,6 +43,7 @@ public class Card {
     private Rarity rarity;
 
     //TODO Test it it works: @Enumerated(value = EnumType.ORDINAL) instead of current solution
+    @Column(name = "dust_cost")
     private int dustCost;
 
     @ManyToMany(fetch= FetchType.LAZY)
@@ -51,6 +55,10 @@ public class Card {
 
     public void addDeck(Deck deck){
         this.deck.add(deck);
+    }
+
+    public void removeDeck(Deck deck){
+        this.deck.remove(deck);
     }
 
     //TODO zrobić buildera?

@@ -36,38 +36,65 @@ public class Main {
 
     public static void populateDb(EntityManager em) {
 
-        Card card = new Card("AT_132", CardClass.HUNTER, Type.SPELL,"Justicar Trueheart", CardSet.NAXX,"test text",6,6,3,Rarity.LEGENDARY);
-        Card card2 = new Card("AT_999", CardClass.HUNTER, Type.SPELL,"XXXXXXXX", CardSet.NAXX,"test text2",5,5,5,Rarity.LEGENDARY);
-        Deck deck = new Deck("newDeck1");
-        Deck deck2 = new Deck("newDeck2");
-        deck.addCardToDeck(card);
-        deck2.addCardToDeck(card);
-        deck2.addCardToDeck(card2);
-        User user = new User("tester","test@test.com","123");
-        User user2 = new User("1111111","test1@test.com","123");
-        user.addDeckToUser(deck);
+//        Card card1 = new Card("AT_132", CardClass.HUNTER, Type.SPELL,"Justicar Trueheart", CardSet.NAXX,"test text",6,6,3,Rarity.LEGENDARY);
+//        Card card2 = new Card("AT_999", CardClass.HUNTER, Type.SPELL,"XXXXXXXX", CardSet.NAXX,"test text2",5,5,5,Rarity.LEGENDARY);
+        Deck deck1 = new Deck("RafałDeck");
+        Deck deck2 = new Deck("JanekDeck");
+        Deck deck3 = new Deck("DominikDeck");
+//        deck1.addCardToDeck(card);
+//        deck2.addCardToDeck(card);
+//        deck3.addCardToDeck(card);
+        
+        User user1 = new User("Rafał","r@r.com","123");
+        User user2 = new User("Jan","j@j.com","123");
+        User user3 = new User("Dominik","d@d.com","123");
+        user1.addDeckToUser(deck1);
         user2.addDeckToUser(deck2);
+        user3.addDeckToUser(deck3);
 
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-        em.persist(card);
-        em.persist(card2);
-        em.persist(deck);
-        em.persist(deck2);
-        em.persist(user);
-        em.persist(user2);
-        transaction.commit();
-
-//        List<Card> cards = jsonCardParser();
 //        EntityTransaction transaction = em.getTransaction();
 //        transaction.begin();
-//        for (Card card : cards) {
-//            em.persist(card);
-//        }
+//        em.persist(card);
+//        em.persist(card2);
+//        em.persist(deck1);
+//        em.persist(deck2);
+//        em.persist(deck3);
+//        em.persist(user1);
+//        em.persist(user2);
+//        em.persist(user3);
 //        transaction.commit();
 
-    }
+        List<Card> cards = jsonCardParser();
+        
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        for (Card card : cards) {
+            em.persist(card);
+        }
+        fillDeckWithCards(deck1,cards,10);
+        fillDeckWithCards(deck2,cards,100);
+        fillDeckWithCards(deck3,cards,1000);
+        em.persist(deck1);
+        em.persist(deck2);
+        em.persist(deck3);
+        em.persist(user1);
+        em.persist(user2);
+        em.persist(user3);
+        transaction.commit();
 
+    }
+    private static void fillDeckWithCards(Deck deck, List<Card> cards, int index) {
+        //int maxCardInDeck = index + 30;
+        try {
+            for (int i = index; i < index + 30; i++) {
+                deck.addCardToDeck(cards.get(i));
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    
 
     private static List<Card> jsonCardParser() {
         List<Card> cards = new ArrayList<>();
