@@ -17,9 +17,15 @@
         <version.postgres>42.1.1</version.postgres>
         <version.maven.compiler.plugin>3.1</version.maven.compiler.plugin>
         <version.jetty-maven-plugin>9.4.6.v20170531</version.jetty-maven-plugin>
+        <version.maven-war-plugin>3.2.0</version.maven-war-plugin>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>${version.maven-war-plugin}</version>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
@@ -114,6 +120,9 @@
     </dependencies>
 
     <build>
+        <finalName>HSdeckTracker</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
+
         <plugins>
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
@@ -123,6 +132,11 @@
                     <reload>automatic</reload>
                     <scanIntervalSeconds>1</scanIntervalSeconds>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${version.maven-war-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
