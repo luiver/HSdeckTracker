@@ -28,13 +28,11 @@ public class Deck {
 
     public void addCardToDeck(Card card){
         cards.add(card);
-        //card.setDeck(this);
         card.addDeck(this);
     }
 
     public void removeCardFromDeck(Card card){
         cards.remove(card);
-        //card.setDeck(null);
         card.removeDeck(this);
     }
 
