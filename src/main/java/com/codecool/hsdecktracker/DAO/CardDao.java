@@ -24,7 +24,7 @@ public class CardDao extends PostgresDAO<Card> implements DAO<Card> {
         card.setCost(resultSet.getInt("mana_cost"));
         card.setAttack(resultSet.getInt("attack"));
         card.setHealth(resultSet.getInt("health"));
-        //card.getRarity(Rarity.valueOf(resultSet.getString("card_set")));
+        card.setRarity(Rarity.valueOf(resultSet.getString("rarity")));
         card.setDustCost(resultSet.getInt("dust_cost"));
 
         return card;
