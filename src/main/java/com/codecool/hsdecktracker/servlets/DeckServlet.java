@@ -8,6 +8,8 @@ import com.codecool.hsdecktracker.model.Deck;
 import com.codecool.hsdecktracker.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,7 +44,16 @@ public class DeckServlet extends HttpServlet {
         } else {
             deckList = getDeckByID(Integer.parseInt(elements[4]));
         }
-        String json = serializeListToJSONString(deckList);
+
+        String json;
+        if (deckList.isEmpty()) {
+            response.setStatus(404);
+            json = "Could not find requested resources";
+        } else {
+            response.setStatus(200);
+            response.setContentType("application/json");
+            json = serializeListToJSONString(deckList);
+        }
         builder.append(json);
         out.println(builder);
     }
@@ -63,7 +74,7 @@ public class DeckServlet extends HttpServlet {
 
     private List<Deck> getAllDecks() {
         List<Deck> deckList = deckDAO.getAll();
-        List<User> userList = userDAO.getAll();
+        //List<User> userList = userDAO.getAll();
         for (Deck deck : deckList) {
             //deckList.get(i).setUser(userList.get(i));
             //deckList.get(i).setUser(userList.get(userList.indexOf(deckList.get(i).getId()))); //TODO improve  matching user id with deck id
@@ -93,14 +104,20 @@ public class DeckServlet extends HttpServlet {
 
 
     @Override //TODO add new deck
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (req.getParameter("addDeck") != null) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
+
+        Deck deck = new ObjectMapper().readValue(jsonObject.toString(), Deck.class);
+        System.out.println(deck);
+        deckDAO.insert(deck);
+
+        if (request.getParameter("addDeck") != null) {
             //TODO add logic for adding new deck
 //            String id = req.getParameter("add");
 //            int itemID = Integer.parseInt(id);
 //            ShoppingCartServlet.cart.add(stock.getItemById(itemID));
         }
-        doGet(req, resp);
+        doGet(request, response);
     }
 
     @Override //TODO delete deck

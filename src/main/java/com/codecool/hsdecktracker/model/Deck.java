@@ -67,4 +67,14 @@ public class Deck {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "Deck{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", cards=" + cards +
+                ", user=" + user +
+                '}';
+    }
 }

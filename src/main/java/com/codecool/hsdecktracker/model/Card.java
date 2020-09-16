@@ -172,28 +172,29 @@ public class Card {
         this.deck = deck;
     }
 
-    @Override
-    public String toString() {
-        return "Card{" +
-                "idString='" + id + '\'' +
-                ", playerClass=" + cardClass +
-                ", type=" + type +
-                ", name='" + name + '\'' +
-                ", cardSet=" + set +
-                ", text='" + text + '\'' +
-                ", manaCost=" + cost +
-                ", attack=" + attack +
-                ", health=" + health +
-                ", rarity=" + rarity +
-                ", dustCost=" + dustCost +
-                '}';
-    }
-
     public long getCard_id() {
         return card_id;
     }
 
     public void setCard_id(long card_id) {
         this.card_id = card_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "card_id=" + card_id +
+                ", id='" + id + '\'' +
+                ", cardClass=" + cardClass +
+                ", type=" + type +
+                ", name='" + name + '\'' +
+                ", set=" + set +
+                ", text='" + text + '\'' +
+                ", cost=" + cost +
+                ", attack=" + attack +
+                ", health=" + health +
+                ", rarity=" + rarity +
+                ", dustCost=" + dustCost +
+                '}';
     }
 }

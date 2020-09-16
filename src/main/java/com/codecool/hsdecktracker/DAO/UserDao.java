@@ -92,7 +92,7 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
         User user;
         Connection connection = this.getConnection();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("Select * from decks d join users u on d.user_id = u.id where d.id = ?;");
+            PreparedStatement preparedStatement = connection.prepareStatement("Select email, u.name, password, u.id from decks d join users u on d.user_id = u.id where d.id = ?;");
             preparedStatement.setLong(1, id);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {

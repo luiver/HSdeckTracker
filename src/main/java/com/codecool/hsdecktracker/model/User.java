@@ -88,4 +88,15 @@ public class User {
     public void setDecks(List<Deck> decks) {
         this.decks = decks;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", decks=" + decks +
+                '}';
+    }
 }
