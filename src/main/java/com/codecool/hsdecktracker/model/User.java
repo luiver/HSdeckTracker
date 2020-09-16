@@ -1,9 +1,14 @@
 package com.codecool.hsdecktracker.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(value = { "decks" })
 @Entity(name = "users")
 public class User {
 
@@ -23,7 +28,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade=CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Deck> decks;
 
-    public User( String name, String email, String password) {
+    public User() {
+    }
+
+    @JsonCreator
+    public User(@JsonProperty("name")String name, @JsonProperty("email")String email, @JsonProperty("password")String password) {
         this.name = name;
         this.email = email;
         this.password = password;

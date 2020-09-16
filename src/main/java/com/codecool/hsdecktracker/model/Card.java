@@ -188,4 +188,12 @@ public class Card {
                 ", dustCost=" + dustCost +
                 '}';
     }
+
+    public long getCard_id() {
+        return card_id;
+    }
+
+    public void setCard_id(long card_id) {
+        this.card_id = card_id;
+    }
 }
