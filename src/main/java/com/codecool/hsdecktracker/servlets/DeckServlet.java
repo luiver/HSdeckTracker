@@ -106,27 +106,31 @@ public class DeckServlet extends HttpServlet {
     @Override //TODO add new deck
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
-
         Deck deck = new ObjectMapper().readValue(jsonObject.toString(), Deck.class);
         System.out.println(deck);
         deckDAO.insert(deck);
-
-        if (request.getParameter("addDeck") != null) {
-            //TODO add logic for adding new deck
-//            String id = req.getParameter("add");
-//            int itemID = Integer.parseInt(id);
-//            ShoppingCartServlet.cart.add(stock.getItemById(itemID));
-        }
-        doGet(request, response);
+        doGet(request, response);//do we need this?
     }
 
     @Override //TODO delete deck
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (req.getParameter("deleteDeck") != null) {
-            //TODO add logic
-
+    protected void doDelete(HttpServletRequest request, HttpServletResponse resp) throws IOException {
+        String[] elements = request.getRequestURI().split("/");
+        if (elements.length<5) {
+            deleteAllDecks();
+        } else {
+            deleteDeckByID(Long.parseLong(elements[4]));
         }
-        doGet(req, resp);
+        //doGet(request, resp);
+    }
+
+    private void deleteDeckByID(long deckID) {
+        deckDAO.delete(deckID);
+        deckDAO.deleteCardsDecks(deckID);
+    }
+
+    private void deleteAllDecks() {
+        deckDAO.removeAllDeckDataFromTable("decks");
+        deckDAO.removeAllDeckDataFromTable("cards_decks");
     }
 
 
