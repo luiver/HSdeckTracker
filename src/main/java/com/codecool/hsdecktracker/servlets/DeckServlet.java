@@ -124,13 +124,13 @@ public class DeckServlet extends HttpServlet {
     }
 
     private void deleteDeckByID(long deckID) {
-        deckDAO.delete(deckID);
         deckDAO.deleteCardsDecks(deckID);
+        deckDAO.delete(deckID);
     }
 
     private void deleteAllDecks() {
-        deckDAO.removeAllDeckDataFromTable("decks");
         deckDAO.removeAllDeckDataFromTable("cards_decks");
+        deckDAO.removeAllDeckDataFromTable("decks");
     }
 
 
