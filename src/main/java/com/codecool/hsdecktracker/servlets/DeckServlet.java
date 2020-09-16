@@ -1,7 +1,9 @@
 package com.codecool.hsdecktracker.servlets;
 
+import com.codecool.hsdecktracker.DAO.CardDao;
 import com.codecool.hsdecktracker.DAO.DeckDao;
 import com.codecool.hsdecktracker.DAO.UserDao;
+import com.codecool.hsdecktracker.model.Card;
 import com.codecool.hsdecktracker.model.Deck;
 import com.codecool.hsdecktracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,17 +14,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "Decks", urlPatterns = {"api/v1/decks"}, loadOnStartup = 2)
 public class DeckServlet extends HttpServlet {
     private final DeckDao deckDAO;
     private final UserDao userDAO;
+    private final CardDao cardDAO;
 
     public DeckServlet() {
         this.deckDAO = new DeckDao("decks");
         this.userDAO = new UserDao("users");
-
+        this.cardDAO = new CardDao("cards");
     }
 
     @Override // TODO display list all decks
@@ -34,15 +39,25 @@ public class DeckServlet extends HttpServlet {
         for (int i = 0; i <deckList.size() ; i++) {
             deckList.get(i).setUser(userList.get(i));
             //deckList.get(i).setUser(userList.get(userList.indexOf(deckList.get(i).getId()))); //TODO improve  matching user id with deck id
+            List<Card> deckCards = new ArrayList<>();
+            try {
+                List<Integer> intCards = cardDAO.getCardsByDeckID((int) deckList.get(i).getId());
+                for (int j = 0; j <intCards.size() ; j++) {
+                    deckCards.add(cardDAO.getById((long) intCards.get(j)));
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            deckList.get(i).setCards(deckCards);
         }
         StringBuilder builder = new StringBuilder();
-        for (Deck deck : deckList) {
-            builder.append("<div>");
-            builder.append("<span> Deck id: " + deck.getId() + "</span>");
-            builder.append("<span> Deck name: " + deck.getName() + "\n</span>");
-            builder.append("<span> User name: " + deck.getUser().getName() + "\n</span>");
-            builder.append("</div>");
-        }
+//        for (Deck deck : deckList) {
+//            builder.append("<div>");
+//            builder.append("<span> Deck id: " + deck.getId() + "</span>");
+//            builder.append("<span> Deck name: " + deck.getName() + "\n</span>");
+//            builder.append("<span> User name: " + deck.getUser().getName() + "\n</span>");
+//            builder.append("</div>");
+//        }
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(deckList);
