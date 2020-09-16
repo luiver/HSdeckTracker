@@ -87,4 +87,30 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
         }
         throw new ElementNotFoundException("error while getting all Users");
     }
+
+    public User getUserByDeckId(Long id) throws ElementNotFoundException {
+        User user;
+        Connection connection = this.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("Select * from decks d join users u on d.user_id = u.id where d.id = ?;");
+            preparedStatement.setLong(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                user = create(rs);
+                rs.close();
+                preparedStatement.close();
+                connection.close();
+                return user;
+            }
+        } catch (SQLException e) {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        throw new ElementNotFoundException(this.TABLENAME + " not found");
+    }
+
 }

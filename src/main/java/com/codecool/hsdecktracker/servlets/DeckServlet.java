@@ -6,6 +6,7 @@ import com.codecool.hsdecktracker.DAO.UserDao;
 import com.codecool.hsdecktracker.model.Card;
 import com.codecool.hsdecktracker.model.Deck;
 import com.codecool.hsdecktracker.model.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.annotation.WebServlet;
@@ -14,12 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URI;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "Decks", urlPatterns = {"api/v1/decks"}, loadOnStartup = 2)
+@WebServlet(name = "Decks", urlPatterns = {"api/v1/decks", "api/v1/decks/*"}, loadOnStartup = 2)
 public class DeckServlet extends HttpServlet {
     private final DeckDao deckDAO;
     private final UserDao userDAO;
@@ -34,31 +34,63 @@ public class DeckServlet extends HttpServlet {
     @Override // TODO display list all decks
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
-        //URI uri = new URI();
-        List<Deck> deckList = deckDAO.getAll();
-        List<User> userList = userDAO.getAll();
-        for (int i = 0; i <deckList.size() ; i++) {
-            deckList.get(i).setUser(userList.get(i));
-            //deckList.get(i).setUser(userList.get(userList.indexOf(deckList.get(i).getId()))); //TODO improve  matching user id with deck id
-            List<Card> deckCards = null;
-            try {
-                deckCards = cardDAO.getAllCardsFromDeckByID((int) deckList.get(i).getId());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            deckList.get(i).setCards(deckCards);
-        }
         StringBuilder builder = new StringBuilder();
-
-        //List<Card> deckList = cardDAO.getAll();
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(deckList);
-        //String json = objectMapper.writeValueAsString(deckList);
-        System.out.println(json);
-
+        List<Deck> deckList;
+        String[] elements = request.getRequestURI().split("/");
+        if (elements.length<5) {
+            deckList = getAllDecks();
+        } else {
+            deckList = getDeckByID(Integer.parseInt(elements[4]));
+        }
+        String json = serializeListToJSONString(deckList);
         builder.append(json);
         out.println(builder);
     }
+
+    private List<Deck> getDeckByID(int id) {
+        List<Deck> deckList = new ArrayList<>();
+        Deck deck = null;
+        try {
+            deck = deckDAO.getById((long) id);
+            deck.setCards(cardDAO.getAllCardsFromDeckByID((int) deck.getId()));
+            deck.setUser(userDAO.getUserByDeckId(deck.getId()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        deckList.add(deck);
+        return deckList;
+    }
+
+    private List<Deck> getAllDecks() {
+        List<Deck> deckList = deckDAO.getAll();
+        List<User> userList = userDAO.getAll();
+        for (Deck deck : deckList) {
+            //deckList.get(i).setUser(userList.get(i));
+            //deckList.get(i).setUser(userList.get(userList.indexOf(deckList.get(i).getId()))); //TODO improve  matching user id with deck id
+            deck.setUser(userDAO.getUserByDeckId(deck.getId()));
+            List<Card> deckCards = null;
+            try {
+                deckCards = cardDAO.getAllCardsFromDeckByID((int) deck.getId());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            deck.setCards(deckCards);
+        }
+        return deckList;
+
+    }
+
+    private String serializeListToJSONString(List<Deck> deckList) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(deckList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
 
     @Override //TODO add new deck
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
