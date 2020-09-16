@@ -1,7 +1,7 @@
 package com.codecool.hsdecktracker.DAO;
 
-import com.codecool.hsdecktracker.model.Card;
-import com.codecool.hsdecktracker.model.CardClass;
+import com.codecool.hsdecktracker.model.*;
+import sun.net.ftp.FtpDirEntry;
 
 import java.sql.*;
 import java.util.*;
@@ -16,15 +16,15 @@ public class CardDao extends PostgresDAO<Card> implements DAO<Card> {
         Card card = new Card();
         card.setCard_id(resultSet.getInt("card_id"));
         card.setId(resultSet.getString("id_string"));
-        //card.setCardClass(CardClass. resultSet.getString("card_class"));
-        //card.setType();
+        card.setCardClass(CardClass.valueOf(resultSet.getString("card_class")));
+        card.setType(Type.valueOf(resultSet.getString("card_type")));
         card.setName(resultSet.getString("name"));
-        //card.setSet();
+        card.setSet(CardSet.valueOf(resultSet.getString("card_set")));
         card.setText(resultSet.getString("text"));
         card.setCost(resultSet.getInt("mana_cost"));
         card.setAttack(resultSet.getInt("attack"));
         card.setHealth(resultSet.getInt("health"));
-        //card.getRarity();
+        //card.getRarity(Rarity.valueOf(resultSet.getString("card_set")));
         card.setDustCost(resultSet.getInt("dust_cost"));
 
         return card;
