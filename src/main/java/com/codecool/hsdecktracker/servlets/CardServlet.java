@@ -1,5 +1,8 @@
 package com.codecool.hsdecktracker.servlets;
 
+import com.codecool.hsdecktracker.entitymenager.DBPopulator;
+import com.codecool.hsdecktracker.entitymenager.EntityMenager;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +18,7 @@ public class CardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         String linkId = request.getParameter("link_id");
+        new DBPopulator();
         out.println();
     }
 }
