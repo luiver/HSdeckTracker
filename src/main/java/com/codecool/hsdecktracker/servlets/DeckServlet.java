@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "Decks", urlPatterns = {"/decks"}, loadOnStartup = 2)
+@WebServlet(name = "Decks", urlPatterns = {"api/v1/decks"}, loadOnStartup = 2)
 public class DeckServlet extends HttpServlet {
     private final DeckDao deckDAO;
 
@@ -58,6 +58,25 @@ public class DeckServlet extends HttpServlet {
 //            String id = req.getParameter("add");
 //            int itemID = Integer.parseInt(id);
 //            ShoppingCartServlet.cart.add(stock.getItemById(itemID));
+        }
+        doGet(req, resp);
+    }
+
+    @Override //TODO delete deck
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (req.getParameter("deleteDeck") != null) {
+            //TODO add logic
+
+        }
+        doGet(req, resp);
+    }
+
+
+    @Override //TODO update deck
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (req.getParameter("updateDeck") != null) {
+            //TODO add logic
+
         }
         doGet(req, resp);
     }
