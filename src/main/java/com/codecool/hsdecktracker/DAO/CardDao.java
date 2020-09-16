@@ -130,4 +130,24 @@ public class CardDao extends PostgresDAO<Card> implements DAO<Card> {
         }
         throw new ElementNotFoundException("decks_users could not be found");
     }
+
+    public List<Card> getAllCardsFromDeckByID(int deckID) throws ElementNotFoundException, SQLException {
+        List<Card> elements = new ArrayList<>();
+        Connection connection = this.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("Select * from cards_decks cd join cards c on cd.cards_card_id = c.card_id where cd.deck_id = "+deckID+";");
+            while (rs.next()) {
+                elements.add(create(rs));
+            }
+            rs.close();
+            statement.close();
+            connection.close();
+            return elements;
+        } catch (SQLException e) {
+            connection.close();
+            e.printStackTrace();
+        }
+        throw new ElementNotFoundException(TABLENAME + " could not be found");
+    }
 }
