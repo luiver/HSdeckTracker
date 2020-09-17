@@ -78,22 +78,24 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
     }
 
     @Override
-    public boolean update(Deck deck) throws ElementNotFoundException, SQLException {
-        Long id = deck.getId();
+    public boolean update(Deck deck) throws ElementNotFoundException {
         Connection connection = this.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE decks SET " +
-                    "name=? WHERE id = ?");
+                    "name=?, user_id=? WHERE id = ?");
             preparedStatement.setString(1, deck.getName());
-
-
-            preparedStatement.setLong(2, id);
+            preparedStatement.setLong(2, deck.getUser().getId());
+            preparedStatement.setLong(3, deck.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
             return true;
         } catch (SQLException e) {
-            connection.close();
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             e.printStackTrace();
         }
         return false;
