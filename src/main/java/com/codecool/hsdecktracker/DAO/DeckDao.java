@@ -1,5 +1,6 @@
 package com.codecool.hsdecktracker.DAO;
 
+import com.codecool.hsdecktracker.model.Card;
 import com.codecool.hsdecktracker.model.Deck;
 
 import java.sql.*;
@@ -21,8 +22,13 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
     }
 
     @Override
-    public Deck getById(Long id) throws ElementNotFoundException, SQLException {
-        return getElementById(id);
+    public Deck getById(Long id) throws ElementNotFoundException {
+        try {
+            return getElementById(id);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -35,11 +41,9 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
             preparedStatement.setLong(1, deck.getId());
             preparedStatement.setString(2, deck.getName());
             preparedStatement.setLong(3, deck.getUser().getId());
-
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
-            insertDeckCardsIntoCardsDeckTable(deck);
             return true;
         } catch (SQLException e) {
             try {
@@ -52,7 +56,7 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
         return false;
     }
 
-    private void insertDeckCardsIntoCardsDeckTable(Deck deck) {
+    public void insertDeckCardsIntoCardsDeckTable(Deck deck) {
         Connection connection = this.getConnection();
         try {
             for (int i = 0; i < deck.getCards().size(); i++) {
@@ -61,11 +65,9 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
                         "(?, ?)");
                 preparedStatement.setLong(1, deck.getCards().get(i).getCard_id());
                 preparedStatement.setLong(2, deck.getId());
-
                 preparedStatement.executeUpdate();
                 preparedStatement.close();
             }
-
             connection.close();
         } catch (SQLException e) {
             try {
@@ -78,22 +80,24 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
     }
 
     @Override
-    public boolean update(Deck deck) throws ElementNotFoundException, SQLException {
-        Long id = deck.getId();
+    public boolean update(Deck deck) throws ElementNotFoundException {
         Connection connection = this.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE decks SET " +
-                    "name=? WHERE id = ?");
+                    "name=?, user_id=? WHERE id = ?");
             preparedStatement.setString(1, deck.getName());
-
-
-            preparedStatement.setLong(2, id);
+            preparedStatement.setLong(2, deck.getUser().getId());
+            preparedStatement.setLong(3, deck.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
             return true;
         } catch (SQLException e) {
-            connection.close();
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             e.printStackTrace();
         }
         return false;
@@ -119,11 +123,9 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("TRUNCATE TABLE ?;");
             preparedStatement.setString(1, table);
-
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
-
         } catch (SQLException e) {
             try {
                 connection.close();
@@ -133,7 +135,6 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
             e.printStackTrace();
         }
     }
-
 
     public void deleteCardsDecks(long deckID) {
         Connection connection = this.getConnection();
