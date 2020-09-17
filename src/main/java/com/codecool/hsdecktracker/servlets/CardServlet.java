@@ -1,7 +1,6 @@
 package com.codecool.hsdecktracker.servlets;
 
 import com.codecool.hsdecktracker.entitymenager.CardMenager;
-import com.codecool.hsdecktracker.entitymenager.DBPopulator;
 import com.codecool.hsdecktracker.model.Card;
 
 import javax.servlet.annotation.WebServlet;
@@ -19,8 +18,8 @@ public class CardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         String cardClass = request.getParameter("class");
-        List<Card> cards = CardMenager.getCardMenagerInstance().getCardByClass(cardClass);
-        cards.forEach(c -> out.println(c.toString()));
+        List<String> cards = CardMenager.getCardMenagerInstance().getCardByClass(cardClass);
+        cards.forEach(c -> out.println(c));
         out.println();
     }
 }

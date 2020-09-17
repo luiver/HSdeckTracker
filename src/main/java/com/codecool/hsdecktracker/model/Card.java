@@ -1,12 +1,14 @@
 package com.codecool.hsdecktracker.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"deck"})
 @Entity(name = "cards")
 @org.hibernate.annotations.NamedQueries({
         @org.hibernate.annotations.NamedQuery(  name="Card.getByClass",
@@ -78,6 +80,17 @@ public class Card {
         this.health = health;
         this.rarity = rarity;
         this.dustCost = rarity.getCost();
+    }
+
+    public String JSONrepresentation() {
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonOutput = "";
+        try {
+            jsonOutput = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return jsonOutput;
     }
 
     public String getId() {
