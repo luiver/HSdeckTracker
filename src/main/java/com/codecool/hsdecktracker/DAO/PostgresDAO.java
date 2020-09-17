@@ -55,7 +55,8 @@ public abstract class PostgresDAO<T> implements DAO<T> {
             connection.close();
             e.printStackTrace();
         }
-        throw new ElementNotFoundException(this.TABLENAME + " not found");
+        return null;
+        //throw new ElementNotFoundException(this.TABLENAME + " not found");
     }
 
     public boolean deleteElement(Long id) {
