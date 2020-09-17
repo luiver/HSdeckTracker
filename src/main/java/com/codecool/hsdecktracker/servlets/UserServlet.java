@@ -101,12 +101,8 @@ public class UserServlet extends HttpServlet {
 
     private List<User> getUserById(int id) {
         List<User> userList = new ArrayList<>();
-        User user = null;
-        try {
-            user = userDao.getById((long) id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        User user;
+        user = userDao.getById((long) id);
         userList.add(user);
         return userList;
     }
