@@ -34,12 +34,6 @@
             <artifactId>maven-war-plugin</artifactId>
             <version>${version.maven-war-plugin}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.eclipse.jetty</groupId>-->
-<!--            <artifactId>jetty-server</artifactId>-->
-<!--            <version>${version.jetty-maven-plugin}</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
@@ -122,11 +116,9 @@
             <version>2.9.8</version>
         </dependency>
     </dependencies>
-
     <build>
         <finalName>HSdeckTracker</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
-
         <plugins>
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
