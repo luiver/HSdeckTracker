@@ -165,7 +165,11 @@ public class DeckServlet extends HttpServlet {
             JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
             Deck deck = new ObjectMapper().readValue(jsonObject.toString(), Deck.class);
             deck.setId(deckId);
-            deckDAO.update(deck);
+            if (deckDAO.getById(deckId)!=null) {
+                deckDAO.update(deck); //update deck when existing
+            } else {
+                deckDAO.insert(deck); //create new deck if not existing
+            }
             deckDAO.deleteCardsDecks(deck.getId());
             deckDAO.insertDeckCardsIntoCardsDeckTable(deck);
         }
