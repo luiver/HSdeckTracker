@@ -115,4 +115,21 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
         throw new ElementNotFoundException(this.TABLENAME + " not found");
     }
 
+    public void removeAllUsers(String table) {
+        Connection connection = this.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("TRUNCATE TABLE ?;");
+            preparedStatement.setString(1, table);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
 }
