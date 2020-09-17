@@ -33,7 +33,7 @@ public class DeckServlet extends HttpServlet {
         this.cardDAO = new CardDao("cards");
     }
 
-    @Override // TODO display list all decks
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         StringBuilder builder = new StringBuilder();
@@ -41,9 +41,12 @@ public class DeckServlet extends HttpServlet {
         String[] elements = request.getRequestURI().split("/");
         if (elements.length<5) {
             deckList = getAllDecks();
+            filterDeckListByUserName(request, deckList);
         } else {
             deckList = getDeckByID(Integer.parseInt(elements[4]));
         }
+
+        filterDeckListByCardClass(request, deckList);
 
         String json;
         if (deckList.isEmpty()) {
@@ -56,6 +59,31 @@ public class DeckServlet extends HttpServlet {
         }
         builder.append(json);
         out.println(builder);
+    }
+
+    private void filterDeckListByCardClass(HttpServletRequest request, List<Deck> deckList) {
+        //shows only chosen class cards in decks
+        if (request.getParameter("cardClass") != null) {
+            String parameter = request.getParameter("cardClass");
+            for (Deck deck : deckList) {
+                for (int j = 0; j < deck.getCards().size(); j++) {
+                    String cardClassString = deck.getCards().get(j).getCardClass().getStatus();
+                    if (!cardClassString.equals(parameter)) {
+                        deck.getCards().remove(deck.getCards().get(j));
+                        j--;
+                    }
+                }
+            }
+        }
+    }
+
+    private void filterDeckListByUserName(HttpServletRequest request, List<Deck> deckList) {
+        //shows only decks created by specific user
+        if (request.getParameter("userName") != null) {
+            String parameter = request.getParameter("userName");
+            System.out.println(parameter);
+            deckList.removeIf(deck -> !deck.getUser().getName().equals(parameter));
+        }
     }
 
     private List<Deck> getDeckByID(int id) {
@@ -74,11 +102,8 @@ public class DeckServlet extends HttpServlet {
 
     private List<Deck> getAllDecks() {
         List<Deck> deckList = deckDAO.getAll();
-        //List<User> userList = userDAO.getAll();
         for (Deck deck : deckList) {
-            //deckList.get(i).setUser(userList.get(i));
-            //deckList.get(i).setUser(userList.get(userList.indexOf(deckList.get(i).getId()))); //TODO improve  matching user id with deck id
-            deck.setUser(userDAO.getUserByDeckId(deck.getId()));
+              deck.setUser(userDAO.getUserByDeckId(deck.getId()));
             List<Card> deckCards = null;
             try {
                 deckCards = cardDAO.getAllCardsFromDeckByID((int) deck.getId());
@@ -103,16 +128,16 @@ public class DeckServlet extends HttpServlet {
     }
 
 
-    @Override //TODO add new deck
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
         Deck deck = new ObjectMapper().readValue(jsonObject.toString(), Deck.class);
         System.out.println(deck);
         deckDAO.insert(deck);
-        doGet(request, response);//do we need this?
+        //doGet(request, response);//do we need this?
     }
 
-    @Override //TODO delete deck
+    @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse resp) throws IOException {
         String[] elements = request.getRequestURI().split("/");
         if (elements.length<5) {
