@@ -22,11 +22,11 @@ public class UserServlet extends HttpServlet {
     public UserServlet() {
         this.userDao = new UserDao("users");
     }
-
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
-
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         List<User> userList;
