@@ -29,9 +29,7 @@ public class UserServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-//        StringBuilder sb = new StringBuilder();
-        List<User> userList = userDao.getAll();
-        userList = userDao.getAll();
+        List<User> userList;
         String[] splitedURI = request.getRequestURI().split("/");
         if (splitedURI.length<5) {
             userList = userDao.getAll();
