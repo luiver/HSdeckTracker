@@ -25,8 +25,13 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
     }
 
     @Override
-    public User getById(Long id) throws ElementNotFoundException, SQLException {
-        return getElementById(id);
+    public User getById(Long id) throws ElementNotFoundException {
+        try {
+            return getElementById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
