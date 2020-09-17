@@ -24,7 +24,7 @@ public class DBPopulator {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("HSdeckTrackerPU");
         EntityManager em = emf.createEntityManager();
 
-        populateDb(em);
+        //populateDb(em);
         em.clear(); //clear hibernate cache - force next statements to read data from db
         em.close();
         emf.close();

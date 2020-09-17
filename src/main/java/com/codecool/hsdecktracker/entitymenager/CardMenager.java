@@ -18,17 +18,14 @@ public class CardMenager {
         return cardMenager;
     }
 
-//    public List<Card> getCardByClass(String  playerClass){
-//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("HSdeckTrackerPU");
-//        EntityManager em = emf.createEntityManager();
-////        Session session = em.unwrap(org.hibernate.Session.class);
-////        SessionFactory factory = session.getSessionFactory();
-//        TypedQuery<Card> query = em.createNamedQuery("Card.getByClass", Card.class).setParameter(":playerClass", playerClass);
-//        List<Card> results = query.getResultList();
-//        em.clear(); //clear hibernate cache - force next statements to read data from db
-//        em.close();
-//        emf.close();
-//        return results;
-//    }
-
+    public List<Card> getCardByClass(String  playerClass){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("HSdeckTrackerPU");
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Card> query = em.createNamedQuery("Card.getByClass", Card.class).setParameter(":playerClass", playerClass);
+        List<Card> results = query.getResultList();
+        em.clear(); //clear hibernate cache - force next statements to read data from db
+        em.close();
+        emf.close();
+        return results;
+    }
 }

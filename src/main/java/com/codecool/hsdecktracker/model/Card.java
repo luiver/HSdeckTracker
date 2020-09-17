@@ -8,10 +8,10 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "cards")
-//@org.hibernate.annotations.NamedQueries({
-//        @org.hibernate.annotations.NamedQuery(  name="Card.getByClass",
-//                                                query ="SELECT c FROM card.c WHERE c.card_class = :playerClass")
-//})
+@org.hibernate.annotations.NamedQueries({
+        @org.hibernate.annotations.NamedQuery(  name="Card.getByClass",
+                                                query ="SELECT c FROM cards.c WHERE c.card_class = :playerClass")
+})
 public class Card {
 
     @Id
