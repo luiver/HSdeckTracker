@@ -42,7 +42,7 @@ public class DeckServlet extends HttpServlet {
             deckList = getAllDecks();
             filterDeckListByUserName(request, deckList);
         } else {
-            deckList = getDeckByID(Integer.parseInt(elements[4]));
+            deckList = getDeckByID(Long.parseLong(elements[4]));
         }
 
         filterDeckListByCardClass(request, deckList);
@@ -81,11 +81,14 @@ public class DeckServlet extends HttpServlet {
         }
     }
 
-    private List<Deck> getDeckByID(int id) {
+    private List<Deck> getDeckByID(long id) {
         List<Deck> deckList = new ArrayList<>();
         Deck deck = null;
         try {
-            deck = deckDAO.getById((long) id);
+            if (deckDAO.getById(id)==null){
+                return deckList;
+            }
+            deck = deckDAO.getById(id);
             deck.setCards(cardDAO.getAllCardsFromDeckByID((int) deck.getId()));
             deck.setUser(userDAO.getUserByDeckId(deck.getId()));
         } catch (SQLException e) {
