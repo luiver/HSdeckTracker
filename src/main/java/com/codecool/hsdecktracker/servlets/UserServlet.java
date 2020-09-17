@@ -51,7 +51,7 @@ public class UserServlet extends HttpServlet {
     }
 
     private void deleteAllDecks() {
-        userDao.removeAllUsersFromTable("users");
+        userDao.removeAllUsers("users");
     }
 
     @Override
