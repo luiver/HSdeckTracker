@@ -34,12 +34,11 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
         Connection connection = this.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users" +
-                    "(name) VALUES " +
-                    "(?)");
-            //preparedStatement.setLong(1, user.getId());
+                    "(name, email, password) VALUES " +
+                    "(?, ?, ?)");
             preparedStatement.setString(1, user.getName());
-            //preparedStatement.setInt(3, user.getReward());
-
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getPassword());
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
@@ -53,15 +52,14 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
 
     @Override
     public boolean update(User user) throws ElementNotFoundException, SQLException {
-        Long id = user.getId();
         Connection connection = this.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE users SET " +
-                    "name=? WHERE id = ?");
+                    "name=?, email=?, password=? WHERE id = ?");
             preparedStatement.setString(1, user.getName());
-
-
-            preparedStatement.setLong(2, id);
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setLong(4, user.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
@@ -82,7 +80,7 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
     public List<User> getAll() {
         try {
             return getAllElements();
-        } catch (SQLException  e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         throw new ElementNotFoundException("error while getting all Users");
