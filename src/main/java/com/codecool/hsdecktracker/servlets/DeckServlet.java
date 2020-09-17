@@ -5,6 +5,7 @@ import com.codecool.hsdecktracker.DAO.DeckDao;
 import com.codecool.hsdecktracker.DAO.UserDao;
 import com.codecool.hsdecktracker.model.Card;
 import com.codecool.hsdecktracker.model.Deck;
+import com.codecool.hsdecktracker.helpers.JsonParserHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
@@ -25,11 +26,13 @@ public class DeckServlet extends HttpServlet {
     private final DeckDao deckDAO;
     private final UserDao userDAO;
     private final CardDao cardDAO;
+    private final JsonParserHelper<Deck> jsonParserHelper;
 
     public DeckServlet() {
         this.deckDAO = new DeckDao("decks");
         this.userDAO = new UserDao("users");
         this.cardDAO = new CardDao("cards");
+        this.jsonParserHelper = new JsonParserHelper<>();
     }
 
     @Override
@@ -54,7 +57,7 @@ public class DeckServlet extends HttpServlet {
         } else {
             response.setStatus(200);
             response.setContentType("application/json");
-            json = serializeListToJSONString(deckList);
+            json = jsonParserHelper.serializeListToJSONString(deckList);
         }
         builder.append(json);
         out.println(builder);
@@ -113,18 +116,6 @@ public class DeckServlet extends HttpServlet {
         return deckList;
 
     }
-
-    private String serializeListToJSONString(List<Deck> deckList) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = null;
-        try {
-            json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(deckList);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return json;
-    }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
