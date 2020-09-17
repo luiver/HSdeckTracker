@@ -36,7 +36,7 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users" +
                     "(name) VALUES " +
                     "(?)");
-            //preparedStatement.setLong(1, user.getId());
+            preparedStatement.setLong(1, user.getId());
             preparedStatement.setString(1, user.getName());
             //preparedStatement.setInt(3, user.getReward());
 
@@ -45,7 +45,11 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
             connection.close();
             return true;
         } catch (SQLException e) {
-            connection.close();
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
         return false;
