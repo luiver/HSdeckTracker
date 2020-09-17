@@ -30,7 +30,7 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
     }
 
     @Override
-    public boolean insert(User user) throws ElementNotFoundException, SQLException {
+    public boolean insert(User user) throws ElementNotFoundException {
         Connection connection = this.getConnection();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users" +
@@ -44,7 +44,11 @@ public class UserDao extends PostgresDAO<User> implements DAO<User> {
             connection.close();
             return true;
         } catch (SQLException e) {
-            connection.close();
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
         return false;
