@@ -67,11 +67,7 @@ public class DeckServlet extends HttpServlet {
             String parameter = request.getParameter("cardClass");
             for (Deck deck : deckList) {
                 for (int j = 0; j < deck.getCards().size(); j++) {
-                    String cardClassString = deck.getCards().get(j).getCardClass().getStatus();
-                    if (!cardClassString.equals(parameter)) {
-                        deck.getCards().remove(deck.getCards().get(j));
-                        j--;
-                    }
+                    deck.getCards().removeIf(card -> !card.getCardClass().getStatus().equals(parameter));
                 }
             }
         }
@@ -161,10 +157,9 @@ public class DeckServlet extends HttpServlet {
 
     @Override //TODO update deck
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (req.getParameter("updateDeck") != null) {
-            //TODO add logic
 
-        }
-        doGet(req, resp);
+
+
+        //doGet(req, resp);
     }
 }
