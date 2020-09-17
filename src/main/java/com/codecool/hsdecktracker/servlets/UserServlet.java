@@ -1,6 +1,7 @@
 package com.codecool.hsdecktracker.servlets;
 
 import com.codecool.hsdecktracker.DAO.UserDao;
+import com.codecool.hsdecktracker.model.Deck;
 import com.codecool.hsdecktracker.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -25,6 +26,7 @@ public class UserServlet extends HttpServlet {
     public UserServlet() {
         this.userDao = new UserDao("users");
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] splittedURI = request.getRequestURI().split("/");
@@ -42,15 +44,15 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String[] elements = request.getRequestURI().split("/");
-        if (elements.length < 5 ) {
-            deleteAllDecks();
+        if (elements.length < 5) {
+            deleteAllUsers();
         } else {
             userDao.deleteElement(Long.parseLong(elements[4]));
         }
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 
-    private void deleteAllDecks() {
+    private void deleteAllUsers() {
         userDao.removeAllUsers("users");
     }
 
@@ -59,7 +61,7 @@ public class UserServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         List<User> userList;
         String[] splitedURI = request.getRequestURI().split("/");
-        if (splitedURI.length<5) {
+        if (splitedURI.length < 5) {
             userList = userDao.getAll();
         } else {
             userList = getUserById(Integer.parseInt(splitedURI[4]));
