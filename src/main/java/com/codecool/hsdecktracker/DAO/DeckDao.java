@@ -36,7 +36,6 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
             preparedStatement.setLong(1, deck.getId());
             preparedStatement.setString(2, deck.getName());
             preparedStatement.setLong(3, deck.getUser().getId());
-
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
@@ -61,11 +60,9 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
                         "(?, ?)");
                 preparedStatement.setLong(1, deck.getCards().get(i).getCard_id());
                 preparedStatement.setLong(2, deck.getId());
-
                 preparedStatement.executeUpdate();
                 preparedStatement.close();
             }
-
             connection.close();
         } catch (SQLException e) {
             try {
@@ -121,11 +118,9 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("TRUNCATE TABLE ?;");
             preparedStatement.setString(1, table);
-
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
-
         } catch (SQLException e) {
             try {
                 connection.close();
@@ -136,7 +131,6 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
         }
     }
 
-
     public void deleteCardsDecks(long deckID) {
         Connection connection = this.getConnection();
         try {
@@ -144,28 +138,6 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
             preparedStatement.setLong(1, deckID);
             preparedStatement.executeUpdate();
             preparedStatement.close();
-            connection.close();
-        } catch (SQLException e) {
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            e.printStackTrace();
-        }
-    }
-
-    public void updateCardsDecks(Deck deck) {
-        Connection connection = this.getConnection();
-        try {
-            for (int i = 0; i <deck.getCards().size() ; i++) {
-                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE cards_decks SET " +
-                        "cards_card_id=?  WHERE deck_id = ?");
-                preparedStatement.setLong(1, deck.getCards().get(i).getCard_id());
-                preparedStatement.setLong(2, deck.getId());
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-            }
             connection.close();
         } catch (SQLException e) {
             try {
