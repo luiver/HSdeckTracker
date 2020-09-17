@@ -18,8 +18,8 @@ public class CardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
-        String linkId = request.getParameter("link_id");
-        List<Card> cards = CardMenager.getCardMenagerInstance().getCardByClass("DRUID");
+        String cardClass = request.getParameter("class");
+        List<Card> cards = CardMenager.getCardMenagerInstance().getCardByClass(cardClass);
         cards.forEach(c -> out.println(c.toString()));
         out.println();
     }
