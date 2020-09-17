@@ -3,10 +3,10 @@ package com.codecool.hsdecktracker.servlets;
 import com.codecool.hsdecktracker.DAO.CardDao;
 import com.codecool.hsdecktracker.DAO.DeckDao;
 import com.codecool.hsdecktracker.DAO.UserDao;
+import com.codecool.hsdecktracker.helpers.DeckFilterHelper;
 import com.codecool.hsdecktracker.model.Card;
 import com.codecool.hsdecktracker.model.Deck;
 import com.codecool.hsdecktracker.helpers.JsonParserHelper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -27,12 +27,14 @@ public class DeckServlet extends HttpServlet {
     private final UserDao userDAO;
     private final CardDao cardDAO;
     private final JsonParserHelper<Deck> jsonParserHelper;
+    private final DeckFilterHelper deckFilterHelper;
 
     public DeckServlet() {
         this.deckDAO = new DeckDao("decks");
         this.userDAO = new UserDao("users");
         this.cardDAO = new CardDao("cards");
         this.jsonParserHelper = new JsonParserHelper<>();
+        this.deckFilterHelper = new DeckFilterHelper();
     }
 
     @Override
@@ -43,13 +45,11 @@ public class DeckServlet extends HttpServlet {
         String[] elements = request.getRequestURI().split("/");
         if (elements.length<5) {
             deckList = getAllDecks();
-            filterDeckListByUserName(request, deckList);
+            deckFilterHelper.filterDeckListByUserName(request, deckList);
         } else {
             deckList = getDeckByID(Long.parseLong(elements[4]));
         }
-
-        filterDeckListByCardClass(request, deckList);
-
+        deckFilterHelper.filterDeckListByCardClass(request, deckList);
         String json;
         if (deckList.isEmpty()) {
             response.setStatus(404);
@@ -61,27 +61,6 @@ public class DeckServlet extends HttpServlet {
         }
         builder.append(json);
         out.println(builder);
-    }
-
-    private void filterDeckListByCardClass(HttpServletRequest request, List<Deck> deckList) {
-        //shows only chosen class cards in decks
-        if (request.getParameter("cardClass") != null) {
-            String parameter = request.getParameter("cardClass");
-            for (Deck deck : deckList) {
-                for (int j = 0; j < deck.getCards().size(); j++) {
-                    deck.getCards().removeIf(card -> !card.getCardClass().getStatus().equals(parameter));
-                }
-            }
-        }
-    }
-
-    private void filterDeckListByUserName(HttpServletRequest request, List<Deck> deckList) {
-        //shows only decks created by specific user
-        if (request.getParameter("userName") != null) {
-            String parameter = request.getParameter("userName");
-            System.out.println(parameter);
-            deckList.removeIf(deck -> !deck.getUser().getName().equals(parameter));
-        }
     }
 
     private List<Deck> getDeckByID(long id) {
