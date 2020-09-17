@@ -1,5 +1,6 @@
 package com.codecool.hsdecktracker.DAO;
 
+import com.codecool.hsdecktracker.model.Card;
 import com.codecool.hsdecktracker.model.Deck;
 
 import java.sql.*;
@@ -39,7 +40,6 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
             preparedStatement.executeUpdate();
             preparedStatement.close();
             connection.close();
-            insertDeckCardsIntoCardsDeckTable(deck);
             return true;
         } catch (SQLException e) {
             try {
@@ -52,7 +52,7 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
         return false;
     }
 
-    private void insertDeckCardsIntoCardsDeckTable(Deck deck) {
+    public void insertDeckCardsIntoCardsDeckTable(Deck deck) {
         Connection connection = this.getConnection();
         try {
             for (int i = 0; i < deck.getCards().size(); i++) {
@@ -144,6 +144,28 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
             preparedStatement.setLong(1, deckID);
             preparedStatement.executeUpdate();
             preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public void updateCardsDecks(Deck deck) {
+        Connection connection = this.getConnection();
+        try {
+            for (int i = 0; i <deck.getCards().size() ; i++) {
+                PreparedStatement preparedStatement = connection.prepareStatement("UPDATE cards_decks SET " +
+                        "cards_card_id=?  WHERE deck_id = ?");
+                preparedStatement.setLong(1, deck.getCards().get(i).getCard_id());
+                preparedStatement.setLong(2, deck.getId());
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+            }
             connection.close();
         } catch (SQLException e) {
             try {

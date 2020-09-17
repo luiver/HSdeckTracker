@@ -5,7 +5,6 @@ import com.codecool.hsdecktracker.DAO.DeckDao;
 import com.codecool.hsdecktracker.DAO.UserDao;
 import com.codecool.hsdecktracker.model.Card;
 import com.codecool.hsdecktracker.model.Deck;
-import com.codecool.hsdecktracker.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
@@ -130,6 +129,7 @@ public class DeckServlet extends HttpServlet {
         Deck deck = new ObjectMapper().readValue(jsonObject.toString(), Deck.class);
         System.out.println(deck);
         deckDAO.insert(deck);
+        deckDAO.insertDeckCardsIntoCardsDeckTable(deck);
         //doGet(request, response);//do we need this?
     }
 
@@ -156,10 +156,12 @@ public class DeckServlet extends HttpServlet {
 
 
     @Override //TODO update deck
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-
-
+    protected void doPut(HttpServletRequest request, HttpServletResponse resp) throws IOException {
+        JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
+        Deck deck = new ObjectMapper().readValue(jsonObject.toString(), Deck.class);
+        deckDAO.update(deck);
+        //deckDAO.updateCardsDecks(deck);
+        deckDAO.deleteCardsDecks(deck.getId());
         //doGet(req, resp);
     }
 }
