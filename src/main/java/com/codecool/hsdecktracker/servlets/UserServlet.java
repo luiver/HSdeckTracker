@@ -80,6 +80,25 @@ public class UserServlet extends HttpServlet {
         out.write(json);
     }
 
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String[] elements = request.getRequestURI().split("/");
+        if (elements.length < 5) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not yet implemented try supply the id ie.: '/Users/88'");
+        } else {
+            long userId = Long.parseLong(elements[4]);
+            JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
+            User newUser = new ObjectMapper().readValue(jsonObject.toString(), User.class);
+            newUser.setId(userId);
+            if (userDao.getById(userId) != null) {
+                userDao.update(newUser);
+            } else {
+                userDao.insert(newUser);
+            }
+            response.setStatus(HttpServletResponse.SC_CREATED);
+        }
+    }
+
     private List<User> getUserById(int id) {
         List<User> userList = new ArrayList<>();
         User user = null;
