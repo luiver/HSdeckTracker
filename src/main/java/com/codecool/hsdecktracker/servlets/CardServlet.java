@@ -38,7 +38,6 @@ public class CardServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         String inputCard = request.getParameter("card");
-        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         if (CardMenager.getCardMenagerInstance().addCard(inputCard)){
             response.setStatus(200);
