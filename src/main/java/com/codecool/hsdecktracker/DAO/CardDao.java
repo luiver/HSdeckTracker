@@ -1,7 +1,6 @@
 package com.codecool.hsdecktracker.DAO;
 
 import com.codecool.hsdecktracker.model.*;
-import sun.net.ftp.FtpDirEntry;
 
 import java.sql.*;
 import java.util.*;
