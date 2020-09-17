@@ -14,7 +14,9 @@ import java.util.List;
         @org.hibernate.annotations.NamedQuery(  name="Card.getByClass",
                                                 query ="SELECT c FROM cards c WHERE c.cardClass = :playerClass"),
         @org.hibernate.annotations.NamedQuery(  name ="Card.getAll",
-                                                query = "SELECT c FROM cards c")
+                                                query = "SELECT c FROM cards c"),
+        @org.hibernate.annotations.NamedQuery(  name="Card.deleteById",
+                                                query = "DELETE FROM cards c WHERE c.id = :cardId")
 })
 public class Card {
 

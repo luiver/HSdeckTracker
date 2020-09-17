@@ -2,13 +2,8 @@ package com.codecool.hsdecktracker.entitymenager;
 
 import com.codecool.hsdecktracker.model.Card;
 import com.codecool.hsdecktracker.model.CardClass;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,5 +31,18 @@ public class CardMenager {
         em.close();
         emf.close();
         return resultsJSON;
+    }
+
+    public int deleteCardById(String id){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("HSdeckTrackerPU");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createNamedQuery("Card.deleteById").setParameter("cardId", id);
+        int rowsAffected = query.executeUpdate();
+        em.getTransaction().commit();
+        em.clear(); //clear hibernate cache - force next statements to read data from db
+        em.close();
+        emf.close();
+        return rowsAffected;
     }
 }

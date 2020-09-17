@@ -1,8 +1,6 @@
 package com.codecool.hsdecktracker.servlets;
 
 import com.codecool.hsdecktracker.entitymenager.CardMenager;
-import com.codecool.hsdecktracker.model.Card;
-import org.json.simple.JSONArray;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-
-import static org.json.JSONArray.*;
 
 @WebServlet(name="CardServlet", urlPatterns = {"/api/v1/cards"}, loadOnStartup = 2)
 public class CardServlet extends HttpServlet {
@@ -28,4 +24,18 @@ public class CardServlet extends HttpServlet {
         out.println(output);
     }
 
+    @Override
+    protected  void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        String id = request.getParameter("id");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        int rowsAffected = CardMenager.getCardMenagerInstance().deleteCardById(id);
+        out.println("{\"rows affected\":" + rowsAffected + "}");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    }
 }
