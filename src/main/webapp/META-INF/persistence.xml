@@ -28,5 +28,4 @@
             <!--<property name="javax.persistence.sql-load-script-source" value="insert.sql"/>-->
         </properties>
     </persistence-unit>
-
 </persistence>

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "Decks", urlPatterns = {"api/v1/decks"}, loadOnStartup = 2)
+@WebServlet(name = "Decks", urlPatterns = {"api/v1/decks"}, loadOnStartup = 1)
 public class DeckServlet extends HttpServlet {
     private final DeckDao deckDAO;
 

@@ -16,11 +16,17 @@
         <version.el>3.0.1-b03</version.el>
         <version.postgres>42.2.10</version.postgres>
         <version.maven.compiler.plugin>3.1</version.maven.compiler.plugin>
-        <version.jetty-maven-plugin>9.4.12.v20180830</version.jetty-maven-plugin>
+        <version.jetty-maven-plugin>9.4.31.v20200723</version.jetty-maven-plugin>
         <version.maven-war-plugin>3.2.0</version.maven-war-plugin>
+        <version.asm>7.3</version.asm>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>${version.asm}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-war-plugin</artifactId>
