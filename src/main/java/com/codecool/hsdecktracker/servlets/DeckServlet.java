@@ -52,11 +52,11 @@ public class DeckServlet extends HttpServlet {
         deckFilterHelper.filterDeckListByCardClass(request, deckList);
         String json;
         if (deckList.isEmpty()) {
-            response.setStatus(404);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,"Could not find requested resources");
             json = "Could not find requested resources";
         } else {
-            response.setStatus(200);
-            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType("application/json; charset=utf-8");
             json = jsonParserHelper.serializeListToJSONString(deckList);
         }
         builder.append(json);
@@ -98,22 +98,29 @@ public class DeckServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
-        Deck deck = new ObjectMapper().readValue(jsonObject.toString(), Deck.class);
-        System.out.println(deck);
-        deckDAO.insert(deck);
-        deckDAO.insertDeckCardsIntoCardsDeckTable(deck);
+        String[] elements = request.getRequestURI().split("/");
+        if (elements.length<5) {
+            JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
+            Deck deck = new ObjectMapper().readValue(jsonObject.toString(), Deck.class);
+            System.out.println(deck);
+            deckDAO.insert(deck);
+            deckDAO.insertDeckCardsIntoCardsDeckTable(deck);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Deck creation only on '/decks'!");
+        }
         //doGet(request, response);//do we need this?
     }
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse resp) throws IOException {
         String[] elements = request.getRequestURI().split("/");
-        if (elements.length<5) {
+        if (elements.length < 5 ) {
             deleteAllDecks();
         } else {
             deleteDeckByID(Long.parseLong(elements[4]));
         }
+        resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
         //doGet(request, resp);
     }
 
@@ -127,12 +134,12 @@ public class DeckServlet extends HttpServlet {
         deckDAO.removeAllDeckDataFromTable("decks");
     }
 
-
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse resp) throws IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String[] elements = request.getRequestURI().split("/");
         if (elements.length < 5) {
             //dont know what to do here update all Decks ?
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not yet implemented try supply the id ie.: '/decks/88'");
         } else {
             long deckId = Long.parseLong(elements[4]);
             JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
@@ -145,6 +152,7 @@ public class DeckServlet extends HttpServlet {
             }
             deckDAO.deleteCardsDecks(deck.getId());
             deckDAO.insertDeckCardsIntoCardsDeckTable(deck);
+            response.setStatus(HttpServletResponse.SC_CREATED);
         }
         //doGet(req, resp);
     }
