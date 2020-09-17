@@ -2,7 +2,10 @@ package com.codecool.hsdecktracker.servlets;
 
 import com.codecool.hsdecktracker.DAO.UserDao;
 import com.codecool.hsdecktracker.model.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,7 +27,16 @@ public class UserServlet extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        String[] splittedURI = request.getRequestURI().split("/");
+        if (splittedURI.length < 5) {
+            JsonObject jsonUser = (JsonObject) JsonParser.parseReader(request.getReader());
+            User newUser = new ObjectMapper().readValue(jsonUser.toString(), User.class);
+            userDao.insert(newUser);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            System.out.println(newUser.toString());
+        }else{
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "User creation only on '/users'!");
+        }
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
