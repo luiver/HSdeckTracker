@@ -12,7 +12,9 @@ import java.util.List;
 @Entity(name = "cards")
 @org.hibernate.annotations.NamedQueries({
         @org.hibernate.annotations.NamedQuery(  name="Card.getByClass",
-                                                query ="SELECT c FROM cards c WHERE c.cardClass = :playerClass")
+                                                query ="SELECT c FROM cards c WHERE c.cardClass = :playerClass"),
+        @org.hibernate.annotations.NamedQuery(  name ="Card.getAll",
+                                                query = "SELECT c FROM cards c")
 })
 public class Card {
 

@@ -22,9 +22,10 @@ public class CardServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        String cardClass = request.getParameter("class");
+        String cardClass = request.getParameter("class") != null?request.getParameter("class"):"any";
         List<String> cards = CardMenager.getCardMenagerInstance().getCardByClass(cardClass);
         String output = "{\"cards\":" + cards + "}";
         out.println(output);
     }
+
 }
