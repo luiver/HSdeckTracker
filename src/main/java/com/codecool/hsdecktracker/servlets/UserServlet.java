@@ -38,6 +38,22 @@ public class UserServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "User creation only on '/users'!");
         }
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String[] elements = request.getRequestURI().split("/");
+        if (elements.length < 5 ) {
+            deleteAllDecks();
+        } else {
+            userDao.deleteElement(Long.parseLong(elements[4]));
+        }
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+    }
+
+    private void deleteAllDecks() {
+        userDao.removeAllUsersFromTable("users");
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
