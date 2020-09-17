@@ -22,8 +22,13 @@ public class DeckDao extends PostgresDAO<Deck> implements DAO<Deck> {
     }
 
     @Override
-    public Deck getById(Long id) throws ElementNotFoundException, SQLException {
-        return getElementById(id);
+    public Deck getById(Long id) throws ElementNotFoundException {
+        try {
+            return getElementById(id);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 
     @Override
