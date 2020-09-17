@@ -155,13 +155,20 @@ public class DeckServlet extends HttpServlet {
     }
 
 
-    @Override //TODO update deck
+    @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse resp) throws IOException {
-        JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
-        Deck deck = new ObjectMapper().readValue(jsonObject.toString(), Deck.class);
-        deckDAO.update(deck);
-        //deckDAO.updateCardsDecks(deck);
-        deckDAO.deleteCardsDecks(deck.getId());
+        String[] elements = request.getRequestURI().split("/");
+        if (elements.length < 5) {
+            //dont know what to do here update all Decks ?
+        } else {
+            long deckId = Long.parseLong(elements[4]);
+            JsonObject jsonObject = JsonParser.parseReader(request.getReader()).getAsJsonObject();
+            Deck deck = new ObjectMapper().readValue(jsonObject.toString(), Deck.class);
+            deck.setId(deckId);
+            deckDAO.update(deck);
+            deckDAO.deleteCardsDecks(deck.getId());
+            deckDAO.insertDeckCardsIntoCardsDeckTable(deck);
+        }
         //doGet(req, resp);
     }
 }
