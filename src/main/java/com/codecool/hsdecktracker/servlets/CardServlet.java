@@ -19,9 +19,8 @@ public class CardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         String linkId = request.getParameter("link_id");
-        new DBPopulator();
-//        List<Card> cards = CardMenager.getCardMenagerInstance().getCardByClass("DRUID");
-//        cards.forEach(c -> out.println(c.toString()));
+        List<Card> cards = CardMenager.getCardMenagerInstance().getCardByClass("DRUID");
+        cards.forEach(c -> out.println(c.toString()));
         out.println();
     }
 }

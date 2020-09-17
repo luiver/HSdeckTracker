@@ -1,6 +1,7 @@
 package com.codecool.hsdecktracker.entitymenager;
 
 import com.codecool.hsdecktracker.model.Card;
+import com.codecool.hsdecktracker.model.CardClass;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -21,7 +22,7 @@ public class CardMenager {
     public List<Card> getCardByClass(String  playerClass){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("HSdeckTrackerPU");
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Card> query = em.createNamedQuery("Card.getByClass", Card.class).setParameter(":playerClass", playerClass);
+        TypedQuery<Card> query = em.createNamedQuery("Card.getByClass", Card.class).setParameter("playerClass", CardClass.valueOf(playerClass));
         List<Card> results = query.getResultList();
         em.clear(); //clear hibernate cache - force next statements to read data from db
         em.close();
